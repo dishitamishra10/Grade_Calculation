@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SGPA & CGPA Calculator</title>
+  <style>
+    body {
+      font-family: Arial;
+      max-width: 700px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    input {
+      padding: 8px;
+      width: 120px;
+      margin: 5px;
+    }
+
+    button {
+      padding: 10px 15px;
+      margin: 10px 5px;
+      cursor: pointer;
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    .box {
+      border: 1px solid #ccc;
+      padding: 15px;
+      margin-top: 20px;
+      border-radius: 10px;
+    }
+
+    #output {
+      font-size: 18px;
+      font-weight: bold;
+      margin-top: 15px;
+      color: green;
+    }
+  </style>
+</head>
+
+<body>
+
+<h2>SGPA & CGPA Calculator</h2>
+
+<!-- ---------------- SGPA SECTION ---------------- -->
+<div class="box">
+  <h3>📌 SGPA Calculator (Current Semester)</h3>
+
+  <div id="subjects">
+    <input type="number" placeholder="Grade Point">
+    <input type="number" placeholder="Credits"><br>
+  </div>
+
+  <button onclick="addSubject()">➕ Add Subject</button>
+  <button onclick="calculateSGPA()">Calculate SGPA</button>
+
+  <p id="sgpaResult"></p>
+</div>
+
+<!-- ---------------- CGPA SECTION ---------------- -->
+<div class="box">
+  <h3>📌 CGPA Calculator (All Semesters)</h3>
+
+  <div id="semesters">
+    <input type="number" step="0.01" placeholder="Semester SGPA">
+  </div>
+
+  <button onclick="addSemester()">➕ Add Semester</button>
+  <button onclick="calculateCGPA()">Calculate CGPA</button>
+
+  <p id="cgpaResult"></p>
+</div>
+
+<script>
+  // ---------- SGPA Part ----------
+ function addSubject() {
+  let div = document.getElementById("subjects");
+
+  // Create Grade Point input
+  let gradeInput = document.createElement("input");
+  gradeInput.type = "number";
+  gradeInput.placeholder = "Grade Point";
+
+  // Create Credits input
+  let creditInput = document.createElement("input");
+  creditInput.type = "number";
+  creditInput.placeholder = "Credits";
+
+  // Line break
+  let br = document.createElement("br");
+
+  // Append to div (without removing old values)
+  div.appendChild(gradeInput);
+  div.appendChild(creditInput);
+  div.appendChild(br);
+}
+
+  function calculateSGPA() {
+    let inputs = document.querySelectorAll("#subjects input");
+
+    let totalPoints = 0;
+    let totalCredits = 0;
+
+    for (let i = 0; i < inputs.length; i += 2) {
+      let gradePoint = Number(inputs[i].value);
+      let credit = Number(inputs[i + 1].value);
+
+      if (gradePoint > 0 && credit > 0) {
+        totalPoints += gradePoint * credit;
+        totalCredits += credit;
+      }
+    }
+
+    if (totalCredits === 0) {
+      document.getElementById("sgpaResult").innerHTML =
+        "❌ Please enter valid grade points and credits.";
+      return;
+    }
+
+    let sgpa = totalPoints / totalCredits;
+
+    document.getElementById("sgpaResult").innerHTML =
+      "✅ Your SGPA is: " + sgpa.toFixed(2);
+  }
+
+  // ---------- CGPA Part ----------
+function addSemester() {
+  let div = document.getElementById("semesters");
+
+  // Create new semester input
+  let input = document.createElement("input");
+  input.type = "number";
+  input.step = "0.01";
+  input.placeholder = "Semester SGPA";
+
+  // Append safely
+  div.appendChild(document.createElement("br"));
+  div.appendChild(input);
+}
+
+
+  function calculateCGPA() {
+    let inputs = document.querySelectorAll("#semesters input");
+
+    let sum = 0;
+    let count = 0;
+
+    inputs.forEach(input => {
+      let sgpa = Number(input.value);
+
+      if (sgpa > 0) {
+        sum += sgpa;
+        count++;
+      }
+    });
+
+    if (count === 0) {
+      document.getElementById("cgpaResult").innerHTML =
+        "❌ Please enter at least one semester SGPA.";
+      return;
+    }
+
+    let cgpa = sum / count;
+
+    document.getElementById("cgpaResult").innerHTML =
+      "✅ Your CGPA is: " + cgpa.toFixed(2);
+  }
+</script>
+
+</body>
+</html>
